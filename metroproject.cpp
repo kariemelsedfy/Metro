@@ -82,7 +82,10 @@ const int attaba_index_in_line3 = 10;
 
 
 
-int station_num = 29;
+int station_num[3] = { 35, 20, 29 };
+
+
+
 // changing date manually by user
 void change_date() {
     cout << "enter the current day : "; cin >> currentDay;
@@ -119,9 +122,9 @@ void fare_management();
 void admin_sub_manag();
 void admin_user_manag();
 void showStation();
-void add_station(string);
-void removeStation(int);
-void editStation(int, string);
+void add_station(string, int);
+void removeStation(int, int);
+void editStation(int, string, int);
 
 
 
@@ -1604,26 +1607,33 @@ void station_management() {
     char choice;    cin >> choice;
     string new_st_name;
     string edited_st_name;
+    int lineNumber;
     switch (choice)
     {
     case '1':
+        cout << "Enter line number : ";
+        cin >> lineNumber;
         cout << "Enter the new station name : ";
         cin >> new_st_name;
-        add_station(new_st_name);
+        add_station(new_st_name, lineNumber - 1);
         station_management();
         break;
     case '2':
+        cout << "Enter line number : ";
+        cin >> lineNumber;
         cout << "Enter id of staion you want to remove : ";
         int removed_st_id;
         cin >> removed_st_id;
-        removeStation(removed_st_id);
+        removeStation(removed_st_id, lineNumber - 1);
         station_management();
         break;
     case '3':
+        cout << "Enter line number : ";
+        cin >> lineNumber;
         int edited_st_id;
         cout << "Enter the id of station : ";   cin >> edited_st_id;
         cout << "Enter the new name of station : ";   cin >> edited_st_name;
-        editStation(edited_st_id - 1, edited_st_name);
+        editStation(edited_st_id - 1, edited_st_name, lineNumber - 1);
         station_management();
         break;
     case'4':
@@ -1700,18 +1710,19 @@ void view_rides_history_forADMIN()
 
 
 void showStation() {
-    for (int i = 0; i < station_num; i++) {
-        cout << "Station name: " << stations[i] << "Station id: " << i + 1 << "\n";
+    int lineNumber;
+    for (lineNumber = 0; lineNumber < 3; lineNumber++) {
+        for (int i = 0; i < station_num[lineNumber]; i++) {
+            cout << "Station name: " << stations[lineNumber][i] << "Station id: " << i + 1 << "\n";
+        }
     }
 }
 
 
-void add_station(string new_st_name) {
-
-
-    if (station_num < 100) {
-        stations[2][station_num] = "    " + new_st_name + "     ";
-        station_num++;
+void add_station(string new_st_name, int lineNumber) {
+    if (station_num[lineNumber] < 100) {
+        stations[lineNumber][station_num[lineNumber]] = "    " + new_st_name + "     ";
+        station_num[lineNumber]++;
     }
     else {
         cout << "Invalid! Total number of stations exceeded. Please add or remove stations first" << endl;
@@ -1719,29 +1730,29 @@ void add_station(string new_st_name) {
 }
 
 
-void removeStation(int removed_st_id) {
-    if (station_num <= 0) {
+void removeStation(int removed_st_id, int lineNumber) {
+    if (station_num[lineNumber] <= 0) {
         cout << "Invalid! There are no stations to remove. Please add stations first " << endl;
     }
     else {
 
 
-        for (int i = removed_st_id - 1; i <= station_num; i++) {
-            stations[2][i] = stations[2][i + 1];
+        for (int i = removed_st_id - 1; i <= station_num[lineNumber]; i++) {
+            stations[lineNumber][i] = stations[lineNumber][i + 1];
         }
-        station_num--;
+        station_num[lineNumber]--;
     }
 }
 
 
-void editStation(int edited_st_id, string edited_st_name) {
-    if (station_num <= 0) {
+void editStation(int edited_st_id, string edited_st_name, int lineNumber) {
+    if (station_num[lineNumber] <= 0) {
         cout << "Invalid! There are no stations to edit. Please add stations first " << endl;
 
 
     }
     else {
-        stations[2][edited_st_id] = "    " + edited_st_name + "     ";
+        stations[lineNumber][edited_st_id] = "    " + edited_st_name + "     ";
     }
 }
 
